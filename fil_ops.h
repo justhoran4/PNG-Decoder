@@ -1,0 +1,21 @@
+#include <stdio.h>
+
+/*******************************************************
+TYPES
+*******************************************************/
+typedef unsigned char boolean;
+
+typedef unsigned long long uint64;
+typedef unsigned int uint32;
+typedef unsigned short uint16;
+typedef unsigned char uint8;
+
+typedef uint64 uptr;
+
+/*******************************************************
+CONSTANTS
+*******************************************************/
+#define TRUE    ( 1 )
+#define FALSE   ( 0 )
+
+size_t get_file_size( FILE *fp );

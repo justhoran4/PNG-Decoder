@@ -1,3 +1,6 @@
+#ifndef PNG_DECODER_DECODE_PNG_H
+#define PNG_DECODER_DECODE_PNG_H
+
 #include "fil_ops.h"
 
 /*******************************************************
@@ -74,26 +77,17 @@ enum
     CHNK_TYPE_TEXT,
     CHNK_TYPE_ZTXT,
     CHNK_TYPE_ANCC_LAST = CHNK_TYPE_ZTXT,
-    CHNK_TYPE_CNT
+    CHNK_TYPE_CNT,
+    CHNK_TYPE_INVALID = CHNK_TYPE_CNT
     };
 
+#pragma pack(push, 1)
 typedef struct chnk_layout_t
     {
-    uint32 length;
-    uint8 type[ CHNK_FLD_TYPE_SZ + 1 ]; /* Account for NULL terminator */
-    uint32 crc;
+    uint32  length;
+    char    type[ CHNK_FLD_TYPE_SZ + 1 ]; /* Account for NULL terminator */
+    uint32  crc;
     } chnk_layout;
-
-typedef struct ihdr_data_t
-    {
-    uint32 width;
-    uint32 height;
-    uint8 bit_depth;
-    uint8 color_type;
-    uint8 compression_method;
-    uint8 filter_method;
-    uint8 interlace_method;
-    } ihdr_data;
 
 /*******************************************************
 Defined Chunk Types
@@ -101,7 +95,13 @@ Defined Chunk Types
 
 typedef struct decoder_ihdr_chnk_t
     {
-    ihdr_data ihdr_data;
+    uint32  width;
+    uint32  height;
+    uint8   bit_depth;
+    uint8   color_type;
+    uint8   compression_method;
+    uint8   filter_method;
+    uint8   interlace_method;
     } decoder_ihdr_chnk;
 
 typedef struct decoder_idat_chnk_t
@@ -230,6 +230,8 @@ typedef struct decoder_time_chnk_t
 
 typedef chnk_layout decoder_iend_chnk;
 
+#pragma pack(pop)
+
 /* TODO Add Chunk extensions later */
 
 /*******************************************************
@@ -279,7 +281,9 @@ typedef struct decoder_ctx_t
     uint8         * buf;
     size_t          fil_len;
     size_t          ofst;
-    uint32          chnk_cnt; 
+    uint32          chnk_cnt;
+    decoder_node_chnk
+                  * ihdr_chnk; /* this will serve as the header to the list */
     decoder_node_chnk 
                   * chnk_lst;
     decoder_iend_chnk 
@@ -303,7 +307,8 @@ typedef struct chnk_tbl_entry
     {
     chnk_type_t8    chnk_type;
     char            chnk_name[ CHNK_FLD_TYPE_SZ + 1 ];
-    size_t          sz; 
+    uint32          chnk_data_sz;
+    size_t          chnk_sz; 
     } chnk_tbl_entry;
 extern const chnk_tbl_entry chnk_type_name_sz_tbl[];
 
@@ -311,8 +316,11 @@ extern const chnk_tbl_entry chnk_type_name_sz_tbl[];
 PROCEDURES
 *******************************************************/
 void decode_png_buf( decoder_ctx * ctx );
- 
+
+/* TODO: Move these functions to a more fitting file */
 void store_bytes_int( uint8 * buf, uint8 * data, int sz );
 
 void store_bytes( uint8 * buf, uint8 * data, int sz );
+
+#endif /* PNG_DECODER_DECODE_PNG_H */
 

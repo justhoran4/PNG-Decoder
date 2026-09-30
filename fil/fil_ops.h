@@ -1,3 +1,6 @@
+#ifndef PNG_DECODER_FIL_OPS_H
+#define PNG_DECODER_FIL_OPS_H
+
 #include <stdio.h>
 
 /*******************************************************
@@ -19,3 +22,5 @@ CONSTANTS
 #define FALSE   ( 0 )
 
 size_t get_file_size( FILE *fp );
+
+#endif /* PNG_DECODER_FIL_OPS_H */

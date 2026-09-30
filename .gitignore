@@ -1,0 +1,17 @@
+# Build files
+*.exe
+**/*.o
+build/
+
+# Log/text files
+*.txt
+*.log
+
+# Windows files
+*.ini
+
+# VS Code stuff
+.vscode/*
+
+# Python Cache
+**/__pycache__/

@@ -6,8 +6,15 @@
 #ifndef PNG_DECODER_DECODE_HIST_H
 #define PNG_DECODER_DECODE_HIST_H
 
+#include "png_err_types.h"
 #include <stdio.h>
 
-void decode_hist_chnk(void);
+#include "decode_png.h"
+
+uint32 decode_hist_chnk
+	(
+	decoder_ctx   * ctx,
+	uint8         * data
+	);
 
 #endif /* PNG_DECODER_DECODE_HIST_H */

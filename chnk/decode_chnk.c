@@ -1,5 +1,7 @@
 /* Module to handle the decoding of all of the chunks */
 
+#include "png_err_types.h"
+
 #include <stdio.h>
 #include <string.h>
 
@@ -33,7 +35,7 @@ DESCRIPTION:
     TODO: Maybe replace with callback
           functions in the chunk table
 ***************************************/
-void decode_chnk_types
+png_decode_err_type decode_chnk_types
     (
     decoder_ctx   * ctx,
     chnk_type_t8    chnk,
@@ -43,29 +45,41 @@ void decode_chnk_types
 /*******************************************************
 Local variables
 *******************************************************/
-uint32  bytes_read;
+uint32              bytes_read;
+png_decode_err_type err;
 
 /*******************************************************
 Initialize variables
 *******************************************************/
 bytes_read = 0;
+err = ERR_PNG_DECODE_NONE;
 
 switch( chnk )
     {
     case CHNK_TYPE_IHDR:
+        if( ( err = validate_ihdr_chnk_dat_len( ctx ) ) )
+            {
+            return( err );
+            }
+
         bytes_read = decode_ihdr_chnk( ctx, data );
 
-        /*******************************************************
-        Validate the number of bytes read
-        *******************************************************/
-        if( bytes_read != chnk_type_name_sz_tbl[ chnk ].chnk_data_sz )
+        err = validate_ihdr_chnk( ctx->chnk_lst->chnk.ihdr );
+
+        if( err != ERR_PNG_DECODE_NONE )
             {
-            printf( "Data size error for the IHDR chunk\n" );
-            return;
+            return( err );
             }
         
         break;
     case CHNK_TYPE_PLTE:
+        if( ( err = validate_plte_chnk_dat_len( ctx ) ) )
+            {
+            return( err );
+            }
+
+        bytes_read = decode_plte_chnk( ctx, data );
+        
         break;
     case CHNK_TYPE_IDAT:
         break;
@@ -100,5 +114,16 @@ switch( chnk )
     default:
         break;
     }
+
+/*******************************************************
+Validate the number of bytes read
+*******************************************************/
+if( bytes_read != chnk_type_name_sz_tbl[ chnk ].chnk_data_sz )
+    {
+    printf( "Data size error for the IHDR chunk\n" );
+    return( ERR_PNG_DECODE_CHUNK_DATA_SIZE );
+    }
+
+return( err );
 
 } /* decode_chunk_types */

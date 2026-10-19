@@ -4,9 +4,38 @@
  ***************************************************************/
 
 #include <stdio.h>
+
 #include "{{ module }}.h"
 
-void {{ function_name }}(void)
+/***************************************
+FUNCTION:
+    {{ function_name }}
+
+DESCRIPTION:
+    {{ purpose }}. Returns the number of
+    bytes stored for caller to validate.
+***************************************/
+uint32 {{ function_name }}
+    (
+    decoder_ctx   * ctx,
+    uint8         * data
+    )
 {
-    /* TODO: Implement {{ purpose | lower }}. */
+/*******************************************************
+Local variables
+*******************************************************/
+int i;
+
+/*******************************************************
+Initialize variables
+*******************************************************/
+i = 0;
+
+(void) ctx;
+(void) data;
+
+/* TODO: Parse chunk data and advance i for each consumed byte. */
+
+return( i );
+    
 }

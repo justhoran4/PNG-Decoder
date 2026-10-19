@@ -6,8 +6,15 @@
 #ifndef PNG_DECODER_DECODE_ITXT_H
 #define PNG_DECODER_DECODE_ITXT_H
 
+#include "png_err_types.h"
 #include <stdio.h>
 
-void decode_itxt_chnk(void);
+#include "decode_png.h"
+
+uint32 decode_itxt_chnk
+	(
+	decoder_ctx   * ctx,
+	uint8         * data
+	);
 
 #endif /* PNG_DECODER_DECODE_ITXT_H */

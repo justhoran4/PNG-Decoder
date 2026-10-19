@@ -1,6 +1,7 @@
 #ifndef PNG_DECODER_DECODE_CHNK_H
 #define PNG_DECODER_DECODE_CHNK_H
 
+#include "png_err_types.h"
 #include <stdio.h>
 #include "decode_png.h"
 

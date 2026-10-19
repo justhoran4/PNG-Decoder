@@ -1,6 +1,7 @@
 #ifndef PNG_DECODER_DECODE_PNG_H
 #define PNG_DECODER_DECODE_PNG_H
 
+#include "png_err_types.h"
 #include "fil_ops.h"
 
 /*******************************************************
@@ -111,8 +112,7 @@ typedef struct decoder_idat_chnk_t
 
 typedef struct decoder_plte_chnk_t
     {
-    uint8           plt_cnt;
-    uint8         * plt_data[ PLTE_ENT_SZ ];
+    uint8         * plt_data;
     } decoder_plte_chnk;
 
 typedef struct decoder_trns_chnk_t

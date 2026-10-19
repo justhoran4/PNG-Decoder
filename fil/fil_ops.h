@@ -13,6 +13,8 @@ typedef unsigned int uint32;
 typedef unsigned short uint16;
 typedef unsigned char uint8;
 
+#include "png_err_types.h"
+
 typedef uint64 uptr;
 
 /*******************************************************

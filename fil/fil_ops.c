@@ -1,3 +1,4 @@
+#include "png_err_types.h"
 #include "fil_ops.h"
 
 /***************************************

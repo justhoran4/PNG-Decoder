@@ -6,8 +6,15 @@
 #ifndef {{ header_guard }}
 #define {{ header_guard }}
 
+#include "png_err_types.h"
 #include <stdio.h>
 
-void {{ function_name }}(void);
+#include "decode_png.h"
+
+uint32 {{ function_name }}
+	(
+	decoder_ctx   * ctx,
+	uint8         * data
+	);
 
 #endif /* {{ header_guard }} */

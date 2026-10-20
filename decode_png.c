@@ -25,11 +25,6 @@ static boolean validate_png_sig
     decoder_ctx    * ctx
     );
 
-static chnk_type_t8 get_chnk_from_type
-    (
-    char * name
-    );
-
 /*******************************************************
 CONSTANTS
 *******************************************************/
@@ -179,6 +174,15 @@ DESCRIPTION:
 ***************************************/
 static void decode_chunks( decoder_ctx * ctx )
 {
+/*******************************************************
+Local variables
+*******************************************************/
+decoder_node_chnk   * prev_chnk;
+
+/*******************************************************
+Initialize variables
+*******************************************************/
+prev_chnk = NULL;
 
 if( ctx == NULL )
     {
@@ -186,7 +190,7 @@ if( ctx == NULL )
     return;
     }
 
-if( ctx->chnk_cnt > 0 && !ctx->ihdr )
+if( ctx->chnk_cnt > 0 && !(ctx->chnk_mask & get_chunk_mask( CHNK_TYPE_IHDR ) ) )
     {
     printf( "Parser context has been corrupted with no IHDR chunk" );
     return;
@@ -205,20 +209,80 @@ if( get_chnk_from_type( (char *) ctx->chnk_lst->hdr.type ) != CHNK_TYPE_IHDR )
 
 /*******************************************************
 Make sure the IHDR chunk is set as the acting head of
-the list of chunks
+the list of chunks.
 *******************************************************/  
-ctx->ihdr_chnk = ctx->chnk_lst;
-ctx->chnk_lst = ctx->chnk_lst->next;
+ctx->ihdr_chnk = ctx->chnk_lst; /* Set IHDR chunk as header of list             */
+
+/*******************************************************
+First iteration of list:
+Set header chunk == current chunk
+Set temp previous chunk to current chunk (head)
+Move currrent chunk to next chunk
+*******************************************************/  
+prev_chnk = ctx->chnk_lst;      /* Set previous chunk to current chunk (IHDR)   */
+ctx->chnk_lst = ctx->chnk_lst->next; /* Set current chunk to next chunk for modification */
 
 while( ctx->iend == NULL && ctx->ofst < ctx->fil_len )
     {
+    /*******************************************************
+    Decode chunk and store in chunk pointed to by current
+    chunk
+    *******************************************************/  
     decode_chunk( ctx );
+
+    /*******************************************************
+    After chunk has been decoded, set current chunk's previous
+    chunk to the temporary previous chunk
+    Update the previous chunk to the current chunk
+    Move the current chunk to the next chunk
+    Repeat until all chunks decoded
+    *******************************************************/  
+    ctx->chnk_lst->prev = prev_chnk;
+    prev_chnk = ctx->chnk_lst;
     ctx->chnk_lst = ctx->chnk_lst->next;
     }
 
 // printf( "Current chunk length: %u\n", ctx->ihdr->hdr.length );
 // printf( "Current chunk type: %s\n", ctx->ihdr->hdr.type );
 // printf( "Current chunk CRC: %08x\n", ctx->ihdr->hdr.crc );
+
+}
+
+
+/***************************************
+FUNCTION:
+    get_chnk_from_type
+
+DESCRIPTION:
+    Gets chunk enum from chunk type that
+    is in string format.
+***************************************/
+chnk_type_t8 get_chnk_from_type
+    (
+    char * name
+    )
+{
+/*******************************************************
+Local variables
+*******************************************************/
+int             i;
+chnk_type_t8    ret;
+
+/*******************************************************
+Initialization
+*******************************************************/
+ret = CHNK_TYPE_INVALID;
+
+for( i = 0; i < CHNK_TYPE_CNT; i++ )
+    {
+    if( strcmp( chnk_type_name_sz_tbl[ i ].chnk_name, name ) == 0 )
+        {
+        ret = chnk_type_name_sz_tbl[ i ].chnk_type;
+        break;
+        }
+    }
+
+return( ret );
 
 }
 
@@ -325,41 +389,3 @@ if( header == PNG_SIGNATURE )
 
 return FALSE;
 } /* validate_png_sig()  */
-
-
-/***************************************
-FUNCTION:
-    get_chnk_from_type
-
-DESCRIPTION:
-    Gets chunk enum from chunk type that
-    is in string format.
-***************************************/
-static chnk_type_t8 get_chnk_from_type
-    (
-    char * name
-    )
-{
-/*******************************************************
-Local variables
-*******************************************************/
-int             i;
-chnk_type_t8    ret;
-
-/*******************************************************
-Initialization
-*******************************************************/
-ret = CHNK_TYPE_INVALID;
-
-for( i = 0; i < CHNK_TYPE_CNT; i++ )
-    {
-    if( strcmp( chnk_type_name_sz_tbl[ i ].chnk_name, name ) == 0 )
-        {
-        ret = chnk_type_name_sz_tbl[ i ].chnk_type;
-        break;
-        }
-    }
-
-return( ret );
-
-}

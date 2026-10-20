@@ -45,6 +45,11 @@ CONSTANTS
 #define PLTE_NAME_LEN       ( 79 )
 
 /*******************************************************
+MACROS
+*******************************************************/
+#define get_chunk_mask( chunk )     ( 1 << ( chunk ) )
+
+/*******************************************************
 TYPES
 *******************************************************/
 typedef uint8   chnk_type_t8;
@@ -263,6 +268,8 @@ typedef struct decoder_node_chnk_t /* list of chunks between IDAT and IEND */
     chnk_layout         hdr;
     decoder_chnk_types   chnk;
     struct decoder_node_chnk_t
+                      * prev;
+    struct decoder_node_chnk_t
                       * next;
     } decoder_node_chnk;
 
@@ -289,8 +296,8 @@ typedef struct decoder_ctx_t
     decoder_iend_chnk 
                   * iend;
 
-    /* Flag values to keep track of present chunks */
-    boolean         ihdr;
+    /* Mask to keep track of found chunks   */
+    uint32          chnk_mask;
     } decoder_ctx;
 
 /*******************************************************
@@ -315,12 +322,30 @@ extern const chnk_tbl_entry chnk_type_name_sz_tbl[];
 /*******************************************************
 PROCEDURES
 *******************************************************/
-void decode_png_buf( decoder_ctx * ctx );
+void decode_png_buf
+    (
+    decoder_ctx * ctx
+    );
+
+chnk_type_t8 get_chnk_from_type
+    (
+    char * name
+    );
 
 /* TODO: Move these functions to a more fitting file */
-void store_bytes_int( uint8 * buf, uint8 * data, int sz );
+void store_bytes_int
+    (
+    uint8 * buf,
+    uint8 * data,
+    int sz
+    );
 
-void store_bytes( uint8 * buf, uint8 * data, int sz );
+void store_bytes
+    (
+    uint8 * buf,
+    uint8 * data,
+    int sz
+    );
 
 #endif /* PNG_DECODER_DECODE_PNG_H */
 

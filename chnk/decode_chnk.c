@@ -82,6 +82,20 @@ switch( chnk )
         
         break;
     case CHNK_TYPE_IDAT:
+        /*******************************************************
+        Make sure IDAT chunks are in consecutive order. If this
+        is not the first IDAT chunk, this makes sure the
+        previous chunk is an IDAT chunk or an error will be
+        thrown
+        *******************************************************/
+        if( ( ctx->chnk_mask & get_chunk_mask( CHNK_TYPE_IDAT ) ) && get_chnk_from_type( ctx->chnk_lst->prev->hdr.type ) != CHNK_TYPE_IDAT )
+            {
+            err = ERR_PNG_DECODE_IDAT_INV_SEQUENCE;
+            return( err );
+            }
+
+        bytes_read = decode_idat_chnk( ctx, data );
+
         break;
     case CHNK_TYPE_IEND:
         break;
@@ -118,9 +132,9 @@ switch( chnk )
 /*******************************************************
 Validate the number of bytes read
 *******************************************************/
-if( bytes_read != chnk_type_name_sz_tbl[ chnk ].chnk_data_sz )
+if( bytes_read != ctx->chnk_lst->hdr.length )
     {
-    printf( "Data size error for the IHDR chunk\n" );
+    printf( "Data size error for the %s chunk\n", chnk_type_name_sz_tbl[ chnk ].chnk_name );
     return( ERR_PNG_DECODE_CHUNK_DATA_SIZE );
     }
 

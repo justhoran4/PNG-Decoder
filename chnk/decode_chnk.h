@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include "decode_png.h"
 
-void decode_chnk_types
+png_decode_err_type decode_chnk_types
     (
     decoder_ctx   * ctx,
     chnk_type_t8    chnk,

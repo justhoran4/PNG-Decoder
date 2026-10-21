@@ -142,13 +142,6 @@ ctx->chnk_lst->hdr.length = data_len;
 memcpy( ctx->chnk_lst->hdr.type, chunk_type, sizeof( ctx->chnk_lst->hdr.type ) );
 ctx->chnk_lst->hdr.crc = crc;
 
-printf("==============\n");
-printf( "Current chunk length: %u\n", data_len );
-printf( "Current chunk type: %s\n", chunk_type );
-printf( "Current chunk CRC: %08x\n", crc );
-printf( "Chunk List: %p\n", (void *)ctx->chnk_lst );
-printf("==============\n");
-
 // TODO CRC updates
 
 // TODO call specific chunk type function
@@ -231,14 +224,30 @@ while( ctx->iend == NULL && ctx->ofst < ctx->fil_len )
     decode_chunk( ctx );
 
     /*******************************************************
-    After chunk has been decoded, set current chunk's previous
-    chunk to the temporary previous chunk
+    After chunk has been decoded:
+    Set previous's chunk next chunk to the current chunk
+    Set current chunk's previous chunk to the temporary previous chunk
     Update the previous chunk to the current chunk
     Move the current chunk to the next chunk
     Repeat until all chunks decoded
-    *******************************************************/  
+    *******************************************************/
+    prev_chnk->next = ctx->chnk_lst;
     ctx->chnk_lst->prev = prev_chnk;
     prev_chnk = ctx->chnk_lst;
+    ctx->chnk_lst = ctx->chnk_lst->next;
+    }
+
+ctx->chnk_lst = ctx->ihdr_chnk;
+
+while( ctx->chnk_lst != NULL )
+    {
+    printf("==============\n");
+    printf( "Current chunk length: %u\n", ctx->chnk_lst->hdr.length );
+    printf( "Current chunk type: %s\n", ctx->chnk_lst->hdr.type );
+    printf( "Current chunk CRC: %08x\n", ctx->chnk_lst->hdr.crc );
+    printf( "Chunk List: %p\n", (void *)ctx->chnk_lst );
+    printf( "Next Chunk: %p\n", (void *) ctx->chnk_lst->next );
+    printf("==============\n");
     ctx->chnk_lst = ctx->chnk_lst->next;
     }
 

@@ -4,18 +4,20 @@
  ***************************************************************/
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "png_err_types.h"
 #include "decode_idat.h"
 
-/***************************************
+/*******************************************************
 FUNCTION:
     decode_idat_chnk
 
 DESCRIPTION:
     Decodes the IDAT chunk in a PNG file. Returns the number of
     bytes stored for caller to validate.
-***************************************/
+*******************************************************/
 uint32 decode_idat_chnk
     (
     decoder_ctx   * ctx,
@@ -25,18 +27,37 @@ uint32 decode_idat_chnk
 /*******************************************************
 Local variables
 *******************************************************/
-int i;
+int                 bytes_read;
+uint32              sz;
 
 /*******************************************************
 Initialize variables
 *******************************************************/
-i = 0;
+bytes_read = 0;
+sz = 0;
 
-(void) ctx;
-(void) data;
+/*******************************************************
+Ensure the right chunk is being read
+*******************************************************/
+if( get_chnk_from_type( ctx->chnk_lst->hdr.type ) != CHNK_TYPE_IDAT )
+    {
+    return( 0 );
+    }
 
-/* TODO: Parse chunk data and advance i for each consumed byte. */
+sz = ctx->chnk_lst->hdr.length;
 
-return( i );
+if( !( ctx->chnk_lst->chnk.idat.data = (uint8 *) malloc( sz ) ) )
+    {
+    return( 0 );
+    }
+
+if( !memcpy( ctx->chnk_lst->chnk.idat.data, data, sz ) )
+    {
+    return( 0 );
+    }
+
+bytes_read = sz;
+
+return( bytes_read );
     
 }

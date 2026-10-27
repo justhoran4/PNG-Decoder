@@ -5,7 +5,6 @@
 
 #include <stdio.h>
 
-#include "png_err_types.h"
 #include "decode_iend.h"
 
 /***************************************
@@ -39,4 +38,44 @@ i = 0;
 
 return( i );
     
+}
+
+/***************************************
+FUNCTION:
+    validate_iend_chnk
+
+DESCRIPTION:
+    Validates data within the IEND chunk.
+***************************************/
+png_decode_err_type validate_iend_chnk
+    (
+    decoder_iend_chnk chnk
+    )
+{
+(void) chnk;
+
+return( ERR_PNG_DECODE_NONE );
+
+}
+
+/***************************************
+FUNCTION:
+    validate_iend_chnk_dat_len
+
+DESCRIPTION:
+    Validates the data length of the IEND chunk.
+***************************************/
+png_decode_err_type validate_iend_chnk_dat_len
+    (
+    decoder_ctx * ctx
+    )
+{
+if( IEND_CHNK_SZ != 0
+&& ctx->chnk_lst->hdr.length != IEND_CHNK_SZ )
+    {
+    return( ERR_PNG_DECODE_CHUNK_DATA_SIZE );
+    }
+
+return( ERR_PNG_DECODE_NONE );
+
 }

@@ -11,10 +11,22 @@
 
 #include "decode_png.h"
 
+#define {{ chunk_type }}_CHNK_SZ ( 0 )
+
 uint32 {{ function_name }}
 	(
 	decoder_ctx   * ctx,
 	uint8         * data
+	);
+
+png_decode_err_type {{ validate_function_name }}
+	(
+	decoder_{{ chunk_name }}_chnk chnk
+	);
+
+png_decode_err_type {{ validate_data_len_function_name }}
+	(
+	decoder_ctx * ctx
 	);
 
 #endif /* {{ header_guard }} */

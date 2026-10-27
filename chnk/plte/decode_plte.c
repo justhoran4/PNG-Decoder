@@ -44,6 +44,24 @@ return( bytes_read );
     
 }
 
+/***************************************
+FUNCTION:
+    validate_plte_chnk
+
+DESCRIPTION:
+    Validates data within the PLTE chunk.
+***************************************/
+png_decode_err_type validate_plte_chnk
+    (
+    decoder_plte_chnk plte
+    )
+{
+(void) plte;
+
+return( ERR_PNG_DECODE_NONE );
+
+}
+
 
 /***************************************
 FUNCTION:

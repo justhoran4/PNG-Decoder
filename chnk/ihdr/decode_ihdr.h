@@ -11,6 +11,7 @@
 
 #include "decode_png.h"
 
+#define IHDR_CHNK_SZ ( 0 )
 #define IHDR_SZ     ( 13 )
 #define IHDR_MAX_DIMENSION_SZ ( 0x80000000 )
 

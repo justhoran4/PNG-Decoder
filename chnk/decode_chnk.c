@@ -15,6 +15,7 @@
 #include "decode_iccp.h"
 #include "decode_sbit.h"
 #include "decode_srgb.h"
+#include "decode_bkgd.h"
 #include "decode_hist.h"
 #include "decode_trns.h"
 #include "decode_phys.h"
@@ -98,32 +99,101 @@ switch( chnk )
 
         break;
     case CHNK_TYPE_IEND:
+        if( ( err = validate_iend_chnk_dat_len( ctx ) ) )
+            {
+            return( err );
+            }
+
         break;
     case CHNK_TYPE_CHRM:
+        if( ( err = validate_chrm_chnk_dat_len( ctx ) ) )
+            {
+            return( err );
+            }
+        
         break;
     case CHNK_TYPE_ICCP:
+        if( ( err = validate_iccp_chnk_dat_len( ctx ) ) )
+            {
+            return( err );
+            }
+        
         break;
     case CHNK_TYPE_SBIT:
+        if( ( err = validate_sbit_chnk_dat_len( ctx ) ) )
+            {
+            return( err );
+            }
+        
         break;
     case CHNK_TYPE_SRGB:
+        if( ( err = validate_srgb_chnk_dat_len( ctx ) ) )
+            {
+            return( err );
+            }            
+
         break;
     case CHNK_TYPE_BKGD:
+        if( ( err = validate_bkgd_chnk_dat_len( ctx ) ) )
+            {
+            return( err );
+            }
+        
         break;
     case CHNK_TYPE_HIST:
+        if( ( err = validate_hist_chnk_dat_len( ctx ) ) )
+            {
+            return( err );
+            }
+        
         break;
     case CHNK_TYPE_TRNS:
+        if( ( err = validate_trns_chnk_dat_len( ctx ) ) )
+            {
+            return( err );
+            }
+        
         break;
     case CHNK_TYPE_PHYS:
+        if( ( err = validate_phys_chnk_dat_len( ctx ) ) )
+            {
+            return( err );
+            }
         break;
     case CHNK_TYPE_SPLT:
+        if( ( err = validate_splt_chnk_dat_len( ctx ) ) )
+            {
+            return( err );
+            }
+
         break;
     case CHNK_TYPE_TIME:
+        if( ( err = validate_time_chnk_dat_len( ctx ) ) )
+            {
+            return( err );
+            }
+
         break;
     case CHNK_TYPE_ITXT:
+        if( ( err = validate_itxt_chnk_dat_len( ctx ) ) )
+            {
+            return( err );
+            }
+
         break;
     case CHNK_TYPE_TEXT:
+        if( ( err = validate_text_chnk_dat_len( ctx ) ) )
+            {
+            return( err );
+            }
+
         break;
     case CHNK_TYPE_ZTXT:
+        if( ( err = validate_ztxt_chnk_dat_len( ctx ) ) )
+            {
+            return( err );
+            }
+
         break;
     default:
         break;

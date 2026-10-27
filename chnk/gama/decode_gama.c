@@ -5,7 +5,6 @@
 
 #include <stdio.h>
 
-#include "png_err_types.h"
 #include "decode_gama.h"
 
 /***************************************
@@ -39,4 +38,44 @@ i = 0;
 
 return( i );
     
+}
+
+/***************************************
+FUNCTION:
+    validate_gama_chnk
+
+DESCRIPTION:
+    Validates data within the GAMA chunk.
+***************************************/
+png_decode_err_type validate_gama_chnk
+    (
+    decoder_gama_chnk chnk
+    )
+{
+(void) chnk;
+
+return( ERR_PNG_DECODE_NONE );
+
+}
+
+/***************************************
+FUNCTION:
+    validate_gama_chnk_dat_len
+
+DESCRIPTION:
+    Validates the data length of the GAMA chunk.
+***************************************/
+png_decode_err_type validate_gama_chnk_dat_len
+    (
+    decoder_ctx * ctx
+    )
+{
+if( GAMA_CHNK_SZ != 0
+&& ctx->chnk_lst->hdr.length != GAMA_CHNK_SZ )
+    {
+    return( ERR_PNG_DECODE_CHUNK_DATA_SIZE );
+    }
+
+return( ERR_PNG_DECODE_NONE );
+
 }

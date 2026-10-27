@@ -5,7 +5,6 @@
 
 #include <stdio.h>
 
-#include "png_err_types.h"
 #include "decode_sbit.h"
 
 /***************************************
@@ -39,4 +38,44 @@ i = 0;
 
 return( i );
     
+}
+
+/***************************************
+FUNCTION:
+    validate_sbit_chnk
+
+DESCRIPTION:
+    Validates data within the SBIT chunk.
+***************************************/
+png_decode_err_type validate_sbit_chnk
+    (
+    decoder_sbit_chnk chnk
+    )
+{
+(void) chnk;
+
+return( ERR_PNG_DECODE_NONE );
+
+}
+
+/***************************************
+FUNCTION:
+    validate_sbit_chnk_dat_len
+
+DESCRIPTION:
+    Validates the data length of the SBIT chunk.
+***************************************/
+png_decode_err_type validate_sbit_chnk_dat_len
+    (
+    decoder_ctx * ctx
+    )
+{
+if( SBIT_CHNK_SZ != 0
+&& ctx->chnk_lst->hdr.length != SBIT_CHNK_SZ )
+    {
+    return( ERR_PNG_DECODE_CHUNK_DATA_SIZE );
+    }
+
+return( ERR_PNG_DECODE_NONE );
+
 }

@@ -5,7 +5,6 @@
 
 #include <stdio.h>
 
-#include "png_err_types.h"
 #include "decode_time.h"
 
 /***************************************
@@ -39,4 +38,44 @@ i = 0;
 
 return( i );
     
+}
+
+/***************************************
+FUNCTION:
+    validate_time_chnk
+
+DESCRIPTION:
+    Validates data within the TIME chunk.
+***************************************/
+png_decode_err_type validate_time_chnk
+    (
+    decoder_time_chnk chnk
+    )
+{
+(void) chnk;
+
+return( ERR_PNG_DECODE_NONE );
+
+}
+
+/***************************************
+FUNCTION:
+    validate_time_chnk_dat_len
+
+DESCRIPTION:
+    Validates the data length of the TIME chunk.
+***************************************/
+png_decode_err_type validate_time_chnk_dat_len
+    (
+    decoder_ctx * ctx
+    )
+{
+if( TIME_CHNK_SZ != 0
+&& ctx->chnk_lst->hdr.length != TIME_CHNK_SZ )
+    {
+    return( ERR_PNG_DECODE_CHUNK_DATA_SIZE );
+    }
+
+return( ERR_PNG_DECODE_NONE );
+
 }

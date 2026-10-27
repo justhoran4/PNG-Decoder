@@ -20,6 +20,7 @@ CHNK_TYPES = [
             "iccp",
             "sbit",
             "srgb",
+            "bkgd",
             "hist",
             "trns",
             "phys",
@@ -43,13 +44,23 @@ def to_identifier(value: str) -> str:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description="Generate chunk C source/header pairs.")
+    parser.add_argument(
+        "--chunks",
+        nargs="+",
+        choices=CHNK_TYPES,
+        default=CHNK_TYPES,
+        help="Chunk types to generate (defaults to all chunk types).",
+    )
+    args = parser.parse_args()
+
     template_dir = Path(__file__).with_name("templates")
     environment = Environment(
         loader=FileSystemLoader(template_dir),
         undefined=StrictUndefined,
         keep_trailing_newline=True,
     )
-    for chnk in CHNK_TYPES:
+    for chnk in args.chunks:
         output_dir = Path(f"{BASE_OUTDIR}\\{chnk}")
         if not os.path.isdir(output_dir):
             os.mkdir(output_dir)
@@ -61,6 +72,13 @@ def main() -> None:
             "module": module,
             "purpose": f"Decodes the {chnk.upper()} chunk in a PNG file",
             "function_name": function_name,
+            "validate_function_name": to_identifier(f"validate_{chnk}_chnk"),
+            "validate_data_len_function_name": to_identifier(
+                f"validate_{chnk}_chnk_dat_len"
+            ),
+            "chunk_name": chnk,
+            "chunk_type": chnk.upper(),
+            "chunk_struct_type": f"decoder_{chnk}_chnk",
             "header_guard": f"PNG_DECODER_{module.upper()}_H",
         }
 

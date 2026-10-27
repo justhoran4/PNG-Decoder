@@ -39,3 +39,43 @@ i = 0;
 return( i );
     
 }
+
+/***************************************
+FUNCTION:
+    {{ validate_function_name }}
+
+DESCRIPTION:
+    Validates data within the {{ chunk_name | upper }} chunk.
+***************************************/
+png_decode_err_type {{ validate_function_name }}
+    (
+    decoder_{{ chunk_name }}_chnk chnk
+    )
+{
+(void) chnk;
+
+return( ERR_PNG_DECODE_NONE );
+
+}
+
+/***************************************
+FUNCTION:
+    {{ validate_data_len_function_name }}
+
+DESCRIPTION:
+    Validates the data length of the {{ chunk_name | upper }} chunk.
+***************************************/
+png_decode_err_type {{ validate_data_len_function_name }}
+    (
+    decoder_ctx * ctx
+    )
+{
+if( {{ chunk_type }}_CHNK_SZ != 0
+&& ctx->chnk_lst->hdr.length != {{ chunk_type }}_CHNK_SZ )
+    {
+    return( ERR_PNG_DECODE_CHUNK_DATA_SIZE );
+    }
+
+return( ERR_PNG_DECODE_NONE );
+
+}

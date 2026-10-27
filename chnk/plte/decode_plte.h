@@ -11,12 +11,18 @@
 
 #include "decode_png.h"
 
+#define PLTE_CHNK_SZ ( 0 )
 #define PLTE_ENT_SZ    ( 3 )   /* pallete entry size */
 
 uint32 decode_plte_chnk
 	(
 	decoder_ctx   * ctx,
 	uint8         * data
+	);
+
+png_decode_err_type validate_plte_chnk
+	(
+	decoder_plte_chnk plte
 	);
 
 png_decode_err_type validate_plte_chnk_dat_len

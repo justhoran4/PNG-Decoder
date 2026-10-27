@@ -5,7 +5,6 @@
 
 #include <stdio.h>
 
-#include "png_err_types.h"
 #include "decode_hist.h"
 
 /***************************************
@@ -39,4 +38,44 @@ i = 0;
 
 return( i );
     
+}
+
+/***************************************
+FUNCTION:
+    validate_hist_chnk
+
+DESCRIPTION:
+    Validates data within the HIST chunk.
+***************************************/
+png_decode_err_type validate_hist_chnk
+    (
+    decoder_hist_chnk chnk
+    )
+{
+(void) chnk;
+
+return( ERR_PNG_DECODE_NONE );
+
+}
+
+/***************************************
+FUNCTION:
+    validate_hist_chnk_dat_len
+
+DESCRIPTION:
+    Validates the data length of the HIST chunk.
+***************************************/
+png_decode_err_type validate_hist_chnk_dat_len
+    (
+    decoder_ctx * ctx
+    )
+{
+if( HIST_CHNK_SZ != 0
+&& ctx->chnk_lst->hdr.length != HIST_CHNK_SZ )
+    {
+    return( ERR_PNG_DECODE_CHUNK_DATA_SIZE );
+    }
+
+return( ERR_PNG_DECODE_NONE );
+
 }

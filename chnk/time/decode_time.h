@@ -11,10 +11,22 @@
 
 #include "decode_png.h"
 
+#define TIME_CHNK_SZ ( 0 )
+
 uint32 decode_time_chnk
 	(
 	decoder_ctx   * ctx,
 	uint8         * data
+	);
+
+png_decode_err_type validate_time_chnk
+	(
+	decoder_time_chnk chnk
+	);
+
+png_decode_err_type validate_time_chnk_dat_len
+	(
+	decoder_ctx * ctx
 	);
 
 #endif /* PNG_DECODER_DECODE_TIME_H */

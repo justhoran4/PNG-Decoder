@@ -61,3 +61,43 @@ bytes_read = sz;
 return( bytes_read );
     
 }
+
+/***************************************
+FUNCTION:
+    validate_idat_chnk
+
+DESCRIPTION:
+    Validates data within the IDAT chunk.
+***************************************/
+png_decode_err_type validate_idat_chnk
+    (
+    decoder_idat_chnk idat
+    )
+{
+(void) idat;
+
+return( ERR_PNG_DECODE_NONE );
+
+}
+
+/***************************************
+FUNCTION:
+    validate_idat_chnk_dat_len
+
+DESCRIPTION:
+    Validates the data length of the IDAT chunk.
+***************************************/
+png_decode_err_type validate_idat_chnk_dat_len
+    (
+    decoder_ctx * ctx
+    )
+{
+if( IDAT_CHNK_SZ != 0
+&& ctx->chnk_lst->hdr.length != IDAT_CHNK_SZ )
+    {
+    return( ERR_PNG_DECODE_CHUNK_DATA_SIZE );
+    }
+
+return( ERR_PNG_DECODE_NONE );
+
+}
